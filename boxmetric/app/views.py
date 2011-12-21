@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -11,9 +12,14 @@ from django.utils import simplejson
     
 def api(request, command):
     #c = Connection()
-    c = Connection(host=os.environ.get('MONGO_SERVER'),os.environ.get('MONGO_PORT'))
+    mhost = os.environ.get('MONGO_SERVER')
+    mport = int(os.environ.get('MONGO_PORT'))
+    muser = os.environ.get('MONGO_USER')
+    mpass = os.environ.get('MONGO_PASS')
+
+    c = Connection(host = mhost, port = mport)
     db = c.gbox_1
-    db.authenticate(os.environ.get('MONGO_USER'),os.environ.get('MONGO_PASS'))
+    db.authenticate(muser,mpass)
     
     m = db.messages
     
