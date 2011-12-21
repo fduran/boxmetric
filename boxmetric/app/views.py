@@ -11,9 +11,9 @@ from django.utils import simplejson
     
 def api(request, command):
     #c = Connection()
-    c = Connection(host='173.203.204.122',port=27017)
+    c = Connection(host=os.environ.get('MONGO_SERVER'),os.environ.get('MONGO_PORT'))
     db = c.gbox_1
-    db.authenticate('lazyant','estorbito')
+    db.authenticate(os.environ.get('MONGO_USER'),os.environ.get('MONGO_PASS'))
     
     m = db.messages
     
