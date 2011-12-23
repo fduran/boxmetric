@@ -5,11 +5,25 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse
 from pymongo import Connection, DESCENDING, ASCENDING
 from bson.code import Code
 from django.utils import simplejson
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.core.urlresolvers import reverse
 
 
-#def index(request):
-#    return render_to_response('index.html', context_instance=RequestContext(request))
-    
+def index(request):
+    return render_to_response('index.html', context_instance=RequestContext(request))
+
+
+@login_required
+def dashboard(request):
+    return render_to_response('dashboard.html', {'user': request.user,} , context_instance=RequestContext(request))
+
+
+def logout_page(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('boxmetric.app.views.index'))
+
+
 def api(request, command):
     #c = Connection()
     mhost = os.environ.get('MONGO_SERVER')
