@@ -1,2 +1,4 @@
 venv
 *.pyc
+local_settings.py
+sqlite3/
