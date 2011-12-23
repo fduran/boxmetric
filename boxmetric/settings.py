@@ -6,6 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 AUTH_PROFILE_MODULE = "app.UserProfile"
+LOGIN_URL = '/login'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
