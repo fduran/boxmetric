@@ -1,7 +1,25 @@
-<html>
-    <head><title>BoxMetric</title></head>
-    <body>
-        <h2>BoxMetric.com</h2>
-        <p><a href="/cp/">Login to your dashboard</a></p>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    
+    <div class="inner">
+        <div class="container">
+            <div class="page-header">
+                <h1>Welcome to Boxmetric</h1>
+                <h2>Analyze and discover the hidden potential of your inbox!</h2>
+            </div>
+            <div class="row">
+                <div class="span8">
+                    <img src="http://i.imgur.com/MgDZy.jpg" width="100%" height="100%" />
+                </div>
+                <div class="span8">
+                    <p>Two households, both alike in dignity, In fair Verona, where we lay our scene, From ancient grudge break to new mutiny, Where civil blood makes civil hands 
+unclean.<br/><br/> From forth the fatal loins of these two foes A pair of star-cross'd lovers take their life; Whose misadventured piteous overthrows Do with their death bury their 
+parents' strife.<br/><br/> The fearful passage of their death-mark'd love, And the continuance of their parents' rage, Which, but their children's end, nought could remove, Is now the 
+two hours' traffic of our stage; The which if you with patient ears attend, What here shall miss, our toil shall strive to mend.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

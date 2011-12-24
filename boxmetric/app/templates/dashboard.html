@@ -2,7 +2,18 @@
 
 {% block content %}
 
-  <h2>This is your dashboard {{ user.first_name }} {{ user.last_name }}</h2>
+<div class="inner">
+        <div class="container">
+                <div class="row">
+                        <div class="span8">
+
+  <h2>Dashboard</h2>
+  <p>Welcome {{ user.first_name }} {{ user.last_name }}</p>
   <p><a href="{% url boxmetric.app.views.logout_page %}">Logout</a></p>
+
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
