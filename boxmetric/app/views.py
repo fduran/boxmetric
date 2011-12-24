@@ -1,4 +1,5 @@
 import os
+import logging
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -11,6 +12,8 @@ from django.core.urlresolvers import reverse
 
 
 def index(request):
+    logger = logging.getLogger('project.logging.console')
+    logger.info('FDV testing logger')
     return render_to_response('index.html', context_instance=RequestContext(request))
 
 
