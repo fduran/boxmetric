@@ -9,11 +9,11 @@ from django.utils import simplejson
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
+import getmail
 
 
 def index(request):
-    logger = logging.getLogger('project.logging.console')
-    logger.info('FDV testing logger')
+    getmail.init()
     return render_to_response('index.html', context_instance=RequestContext(request))
 
 

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Contact(models.Model):
     def __unicode__(self):
         return self.email
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=128,null=True,blank=True)
     email = models.EmailField()
     count = models.PositiveIntegerField(null=True,blank=True)
