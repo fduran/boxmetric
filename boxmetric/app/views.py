@@ -13,13 +13,23 @@ import getmail
 
 
 def index(request):
-    getmail.init()
+    #getmail.init()
     return render_to_response('index.html', context_instance=RequestContext(request))
 
 
 @login_required
 def dashboard(request):
-    return render_to_response('dashboard.html', {'user': request.user,} , context_instance=RequestContext(request))
+    if request.is_ajax and request.method == 'POST':
+        cid = int(request.POST.get('cid'))
+        email = 'sdf@sadf.com'
+        if cid == 1:
+            contact = 'Mary jones one'
+        else:
+            contact = 'I dont know'
+        answer = simplejson.dumps({'content': {'name':contact, 'email':email },})
+        return HttpResponse(answer, mimetype='application/json')
+    else:
+        return render_to_response('dashboard.html', {'user': request.user,} , context_instance=RequestContext(request))
 
 
 def logout_page(request):

@@ -1,19 +1,102 @@
 {% extends "base.html" %}
 
+{% block extra_js %}
+       
+	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+        <script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
+	
+	<script>
+        $(function() {
+            var DataContacts = [
+                {
+                    id: "1",
+                    value: "Caroline Banker"
+                },
+                {
+                    id: "1",
+                    value: "cbanker@example.com"
+                },
+                {
+                    id: "2",
+                    value: "john_johnson@example.com"
+                }
+            ];
+            $( "#contacts" ).autocomplete({
+                minLength: 0,
+                source: DataContacts,
+                focus: function( event, ui ) {
+                    $( "#contacts" ).val( ui.item.value );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    $( "#contacts" ).val( ui.item.value );
+                    $( "#cid" ).val( ui.item.id );
+                    return false;
+                }
+            })
+            .data( "autocomplete" )._renderItem = function( ul, item ) {
+                return $( "<li></li>" )
+                    .data( "item.autocomplete", item )
+                    .append( "<a>" + item.value + "</a>" )
+                    .appendTo( ul );
+            };
+        });        
+
+	</script>
+
+{% endblock %}
+
 {% block content %}
 
 <div class="inner">
         <div class="container">
                 <div class="row">
-                        <div class="span8">
+                        <div class="span12">
 
   <h2>Dashboard</h2>
-  <p>Welcome {{ user.first_name }} {{ user.last_name }}</p>
-  <p><a href="{% url boxmetric.app.views.logout_page %}">Logout</a></p>
+  <p>Welcome {{ user.first_name }} {{ user.last_name }} <a href="{% url boxmetric.app.views.logout_page %}">Logout</a></p>
+
+  <form id="clientForm" action=".">
+    {% csrf_token %}
+    <label for="contacts">Contact: </label>
+    <div class="input">
+        <input id="contacts" name="contacts" type="text" />
+        <input id="submit" name="submit" type="submit" value="Show Contact" class="btn primary" />
+        <input type="hidden" id="cid" name="cid" />
+    </div>
+  </form>
+
+  <br/>
+  <div id="result"></div>
 
 			</div>
 		</div>
 	</div>
 </div>
+
+<script>
+ 	$("#clientForm").submit(function(event) {
+            event.preventDefault();
+
+            var $form = $( this ),
+                cid = $form.find( 'input[name="cid"]' ).val(),
+                csrf_token = $form.find( 'input[name="csrfmiddlewaretoken"]' ).val(),
+                url = $form.attr( 'action' );
+
+            $.post( url, { cid: cid , csrfmiddlewaretoken: csrf_token},
+              function( data ) {
+                  $( "#result" ).empty().append(data.content.name);
+                  $( "#result" ).append(" - ");
+                  $( "#result" ).append(data.content.email);
+              }
+           );
+        });
+</script>
+
 
 {% endblock %}
