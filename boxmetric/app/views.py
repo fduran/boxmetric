@@ -9,7 +9,12 @@ from django.utils import simplejson
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-import getmail
+#import getmail
+from boxmetric.app.models import Contact 
+from django.forms import model_to_dict
+
+from django.core import serializers
+
 
 
 def index(request):
@@ -20,16 +25,35 @@ def index(request):
 @login_required
 def dashboard(request):
     if request.is_ajax and request.method == 'POST':
-        cid = int(request.POST.get('cid'))
-        email = 'sdf@sadf.com'
-        if cid == 1:
-            contact = 'Mary jones one'
+        if 'cid' in request.POST: 
+            cid = int(request.POST.get('cid'))
+            try:
+                contact = Contact.objects.get(id=cid)
+                cdict = model_to_dict(contact)
+                answer = simplejson.dumps({'content': cdict,})
+                return HttpResponse(answer, mimetype='application/json')
+            except contact.DoesNotExist:
+                raise Http404
         else:
-            contact = 'I dont know'
-        answer = simplejson.dumps({'content': {'name':contact, 'email':email },})
-        return HttpResponse(answer, mimetype='application/json')
+            raise Http404
+
     else:
-        return render_to_response('dashboard.html', {'user': request.user,} , context_instance=RequestContext(request))
+        #c_email = list(Contact.objects.filter(user=request.user).values('id','email'))
+        #c_name = list(Contact.objects.filter(user=request.user).exclude(name='').values('id', 'name'))
+        #contacts = c_email + c_name 
+        #csdata = simplejson.dumps(contacts)
+        
+        L = []
+        for e in Contact.objects.filter(user=request.user).values('id','email'):
+            e['value'] = e.pop('email')        
+            L.append(e)
+
+        for e in Contact.objects.filter(user=request.user).exclude(name='').values('id', 'name'):
+            e['value'] = e.pop('name')
+            L.append(e)
+
+        csdata = simplejson.dumps(L)
+        return render_to_response('dashboard.html', {'user': request.user, 'csdata': csdata,}, context_instance=RequestContext(request))
 
 
 def logout_page(request):
