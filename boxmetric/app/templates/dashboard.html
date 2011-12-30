@@ -12,20 +12,11 @@
 	
 	<script>
         $(function() {
-            var DataContacts = [
-                {
-                    id: "1",
-                    value: "Caroline Banker"
-                },
-                {
-                    id: "1",
-                    value: "cbanker@example.com"
-                },
-                {
-                    id: "2",
-                    value: "john_johnson@example.com"
-                }
-            ];
+
+{% autoescape off %}
+            var DataContacts =  {{ csdata }};
+{% endautoescape %}
+
             $( "#contacts" ).autocomplete({
                 minLength: 0,
                 source: DataContacts,
@@ -91,8 +82,12 @@
             $.post( url, { cid: cid , csrfmiddlewaretoken: csrf_token},
               function( data ) {
                   $( "#result" ).empty().append(data.content.name);
-                  $( "#result" ).append(" - ");
+                  $( "#result" ).append("  ");
                   $( "#result" ).append(data.content.email);
+                  $( "#result" ).append("<br/>Number of emails: ");
+                  $( "#result" ).append(data.content.count);
+                  $( "#result" ).append("<br/><br/>");
+                  $( "#result" ).append("<img>").find("img:first").attr("src", data.content.thumbnail );
               }
            );
         });
