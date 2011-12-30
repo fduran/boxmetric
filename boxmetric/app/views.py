@@ -13,9 +13,6 @@ from django.core.urlresolvers import reverse
 from boxmetric.app.models import Contact 
 from django.forms import model_to_dict
 
-from django.core import serializers
-
-
 
 def index(request):
     #getmail.init()
@@ -28,7 +25,7 @@ def dashboard(request):
         if 'cid' in request.POST: 
             cid = int(request.POST.get('cid'))
             try:
-                contact = Contact.objects.get(id=cid)
+                contact = Contact.objects.get(id=cid, user=request.user)
                 cdict = model_to_dict(contact)
                 answer = simplejson.dumps({'content': cdict,})
                 return HttpResponse(answer, mimetype='application/json')
@@ -44,7 +41,7 @@ def dashboard(request):
         #csdata = simplejson.dumps(contacts)
         
         L = []
-        for e in Contact.objects.filter(user=request.user).values('id','email'):
+        for e in Contact.objects.filter(user=request.user).values('id', 'email'):
             e['value'] = e.pop('email')        
             L.append(e)
 
@@ -70,13 +67,12 @@ def api(request, command):
 
     c = Connection(host = mhost, port = mport)
     db = c.gbox_1
-    db.authenticate(muser,mpass)
+    db.authenticate(muser, mpass)
     
     m = db.messages
     
     flist = []
     aflist = []
-    total = '0'
     
     if command == 'most_received':
         toAddrMap = Code('''
@@ -149,7 +145,7 @@ def api(request, command):
         return HttpResponse(simplejson.dumps(flist), mimetype='application/json')
         
     if command == 'most_domains':
-        aflist = m.group(key=["domainfrom",],condition=None,initial={"sum":0},reduce='function(doc,prev) { prev.sum++}')
+        aflist = m.group(key=["domainfrom", ], condition=None, initial={"sum":0}, reduce='function(doc,prev) { prev.sum++}')
         for doc in aflist[0:5]:
             flist.append(doc)
         
@@ -293,7 +289,7 @@ def api(request, command):
         return HttpResponse(simplejson.dumps(flist), mimetype='application/json')
         
     if command == 'total':
-        total = m.count()
+        #total = m.count()
         total_received = m.find( {"folders" : "\\Inbox" } ).count()
         total_sent = m.find( {"folders" : "\\Sent" } ).count()
         num_contacts = 0
