@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^test/$', 'boxmetric.app.views.testservices'),
+    #(r'^test/$', 'boxmetric.app.views.testservices'),
     (r'^cp/$', 'boxmetric.app.views.dashboard'),
     (r'^admin2/', include(admin.site.urls)),
     (r'^api/(?P<command>\S+)/$', 'boxmetric.app.views.api'),

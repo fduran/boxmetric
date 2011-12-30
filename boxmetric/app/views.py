@@ -1,26 +1,23 @@
-import os
 import logging
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from pymongo import Connection, DESCENDING, ASCENDING
-from bson.code import Code
+from pymongo import DESCENDING, ASCENDING
 from django.utils import simplejson
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-#import getmail
-from boxmetric.app.models import Contact 
+from boxmetric.app.models import Contact
 from django.forms import model_to_dict
 
-from django.core import serializers
 
-from query_services import EmailQueryServices 
+from boxmetric.app.query_services import EmailQueryServices 
 email_services = EmailQueryServices()
 
+
 def index(request):
-    #getmail.init()
     return render_to_response('index.html', context_instance=RequestContext(request))
+
 
 @login_required
 def dashboard(request):
@@ -28,7 +25,7 @@ def dashboard(request):
         if 'cid' in request.POST: 
             cid = int(request.POST.get('cid'))
             try:
-                contact = Contact.objects.get(id=cid)
+                contact = Contact.objects.get(id=cid, user=request.user)
                 cdict = model_to_dict(contact)
                 answer = simplejson.dumps({'content': cdict,})
                 return HttpResponse(answer, mimetype='application/json')
@@ -44,7 +41,7 @@ def dashboard(request):
         #csdata = simplejson.dumps(contacts)
         
         L = []
-        for e in Contact.objects.filter(user=request.user).values('id','email'):
+        for e in Contact.objects.filter(user=request.user).values('id', 'email'):
             e['value'] = e.pop('email')        
             L.append(e)
 
@@ -64,7 +61,7 @@ def logout_page(request):
 def api(request, command):
     flist = []
     aflist = []
-    total = '0'
+    #total = '0'
     
     if command == 'most_received':
         result = email_services.most_received_emails()
@@ -118,7 +115,7 @@ def api(request, command):
         return HttpResponse(simplejson.dumps(flist), mimetype='application/json')
         
     if command == 'total':
-        total = email_services.get_total_emails()
+        #total = email_services.get_total_emails()
         total_received = email_services.total_received()
         total_sent = email_services.total_sent()
         num_contacts = 0
