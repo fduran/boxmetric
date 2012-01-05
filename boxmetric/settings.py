@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'app',
     'djcelery',
     'djkombu',
+    'south',
 )
 
 

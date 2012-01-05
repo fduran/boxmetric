@@ -15,3 +15,4 @@ class UserProfile(models.Model):
         return self.user.username
     user = models.ForeignKey(User, unique=True)
     date_created = models.DateField(auto_now_add=True)
+    is_gmail = models.BooleanField(default=True)
