@@ -127,7 +127,17 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'gunicorn',
     'app',
+    'djcelery',
+    'djkombu',
 )
+
+
+# Celery settings
+import djcelery
+djcelery.setup_loader()
+BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+CELERY_RESULT_DBURI = DATABASES['default']
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
