@@ -9,9 +9,9 @@ from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
 from boxmetric.app.models import Contact, UserEvent
 from django.forms import model_to_dict
-
-from boxmetric.app.query_services import EmailQueryServices 
-email_services = EmailQueryServices()
+from celery.decorators import task
+from boxmetric.app.query_services import EmailQueryServices
+from boxmetric.app.tasks import load_contacts
 
 
 def index(request):
@@ -33,12 +33,7 @@ def dashboard(request):
         else:
             raise Http404
 
-    else:
-        #c_email = list(Contact.objects.filter(user=request.user).values('id','email'))
-        #c_name = list(Contact.objects.filter(user=request.user).exclude(name='').values('id', 'name'))
-        #contacts = c_email + c_name 
-        #csdata = simplejson.dumps(contacts)
-        
+    else:       
         L = []
         for e in Contact.objects.filter(user=request.user).values('id', 'email'):
             e['value'] = e.pop('email')        
@@ -56,6 +51,8 @@ def login(request):
     from django.contrib.auth.views import login as auth_login
     login = auth_login(request)
     if request.user.is_authenticated():
+        # testing celery, delete this:
+        load_contacts.delay('some@example.com')
         user_event(request, u'LI')
 
     return login
@@ -77,6 +74,8 @@ def user_event(request, type):
 
 
 def api(request, command):
+    email_services = EmailQueryServices()
+
     flist = []
     aflist = []
     #total = '0'

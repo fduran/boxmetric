@@ -30,7 +30,7 @@ class UserProfile(models.Model):
 
 class UserEvent(models.Model):
     def __unicode__(self):
-        return u'%s : %s' % (self.user.username, self.type)
+        return u'%s : %s - %s' % (self.user.username, self.type, self.timestamp)
 
     EVENT_CHOICES = (
         (u'LI', u'Logged in'),
@@ -44,7 +44,8 @@ class UserEvent(models.Model):
 
     user = models.ForeignKey(User)
     type = models.CharField(max_length=2, choices=EVENT_CHOICES, default=u'IF')
-    extra = models.CharField(max_length=128,null=True,blank=True)
-    ip = models.CharField(max_length=15,null=True,blank=True)
-    referer = models.CharField(max_length=128,null=True,blank=True)
-    agent = models.CharField(max_length=256,null=True,blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True, null=True)
+    extra = models.CharField(max_length=128, null=True, blank=True)
+    ip = models.CharField(max_length=15, null=True, blank=True)
+    referer = models.CharField(max_length=128, null=True, blank=True)
+    agent = models.CharField(max_length=256, null=True, blank=True)
