@@ -26,3 +26,25 @@ class UserProfile(models.Model):
     date_created = models.DateField(auto_now_add=True)
     is_gmail = models.BooleanField(default=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=u'0')
+
+
+class UserEvent(models.Model):
+    def __unicode__(self):
+        return u'%s : %s' % (self.user.username, self.type)
+
+    EVENT_CHOICES = (
+        (u'LI', u'Logged in'),
+        (u'LO', u'Logged out'),
+        (u'IF', u'Info'),
+        (u'ER', u'Error'),
+        (u'RP', u'Reset Password'),
+        (u'WP', u'Wrong Password'),
+        (u'04', u'404 Page'),
+    )
+
+    user = models.ForeignKey(User)
+    type = models.CharField(max_length=2, choices=EVENT_CHOICES, default=u'IF')
+    extra = models.CharField(max_length=128,null=True,blank=True)
+    ip = models.CharField(max_length=15,null=True,blank=True)
+    referer = models.CharField(max_length=128,null=True,blank=True)
+    agent = models.CharField(max_length=256,null=True,blank=True)

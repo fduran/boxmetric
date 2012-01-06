@@ -7,9 +7,8 @@ from django.utils import simplejson
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
-from boxmetric.app.models import Contact
+from boxmetric.app.models import Contact, UserEvent
 from django.forms import model_to_dict
-
 
 from boxmetric.app.query_services import EmailQueryServices 
 email_services = EmailQueryServices()
@@ -53,9 +52,28 @@ def dashboard(request):
         return render_to_response('dashboard.html', {'user': request.user, 'csdata': csdata,}, context_instance=RequestContext(request))
 
 
+def login(request):
+    from django.contrib.auth.views import login as auth_login
+    login = auth_login(request)
+    if request.user.is_authenticated():
+        user_event(request, u'LI')
+
+    return login
+
+
 def logout_page(request):
+    user_event(request, u'LO')
     logout(request)
     return HttpResponseRedirect(reverse('boxmetric.app.views.index'))
+
+
+def user_event(request, type):
+    ip = request.META.get('REMOTE_ADDR', '')
+    referer = request.META.get('HTTP_REFERER', '')[:128]
+    agent = request.META.get('HTTP_USER_AGENT', '')[:256]
+    user_event = UserEvent(user=request.user, type=type, ip=ip, referer=referer, agent=agent)
+    user_event.save()
+    return
 
 
 def api(request, command):
