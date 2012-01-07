@@ -6,11 +6,18 @@
 <div class="inner">
         <div class="container">
 		<div class="row">
-                	<div class="span18">
-				<p>Enter your full Gmail account name below:</p>
+                	<div class="span8">
+   				<h3>Signup For a BoxMetric Account</h3>
+                                <br/>
+                                <p>The signup procedure consists of two easy steps:</p>
+<p>1) Fill out the form below entering your Gmail email address
+and the BoxMetric dashboard password of your choosing. Please note that this is NOT your Gmail password, we don't need it.</p>
+<p>2) Give permission to BoxMetric to access your Gmail account through a web page presented by Google. 
+Note that we cannot delete or change your messages in your Gmail account.</p>
+<br/><br/>
 
 {% if form.errors %}
-<p style="color:red"><b>Please fix the errors below and try again.</b></p>
+<p style="color:red"><b>Please fix the errors below and try again:</b></p>
 {% endif %}
 
 <form method="post" action="{% url 'boxmetric.app.views.signup' %}">
@@ -23,8 +30,9 @@
     <div class="input">{{ form.invitation }}</div>
     <br/>
     {{ form.password.errors }}
-    <label for="id_password"><b>Password:</b></label>
-    <div class="input">{{ form.password }} <small>This is NOT your gmail password, create a new password for the Boxmetric Dashboard.</small></div>
+    <label for="id_password"><b>New Password:</b></label>
+    <div class="input">{{ form.password }}</div>
+    <br/><div class="input"></div>
     <br/>
     <div class="input"><input type="submit" value="Sign Up" class="btn primary" /></div>
 </form>

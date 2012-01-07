@@ -13,6 +13,8 @@ from celery.decorators import task
 from boxmetric.app.query_services import EmailQueryServices
 from boxmetric.app.tasks import load_contacts
 from boxmetric.app.forms import SignupForm
+from django.core.mail import send_mail
+from django import forms
 
 
 def index(request):
@@ -25,7 +27,18 @@ def signup(request):
         if form.is_valid():
             # use gmail user name as our django user name (both are max 30 chars)
             # 1. create password, profile. 
+            gmail = form.cleaned_data['gmail']
+            password = form.cleaned_data['password']
+
+            logger = logging.getLogger('project.logging.console')
+            logger.info('FDV gmail: ' + str(gmail))
+
+            username = gmail.split('@')[0]
+            username = username.split('+')[0]
+            username = username[:30]
+            logger.info('FDV username: ' + str(username))
             # (2. Email link with one-time auth token)
+            
             # 3. hand off to gmail authorize
             return render_to_response('index.html', context_instance=RequestContext(request))
     else:
