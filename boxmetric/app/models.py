@@ -17,9 +17,10 @@ class UserProfile(models.Model):
         return self.user.username
 
     STATUS_CHOICES = (
-        (u'0', u'First Login'),
-        (u'1', u'Active'),
-        (u'2', u'Inactive'),
+        (u'0', u'Signed Up'),
+        (u'1', u'First Login'),
+        (u'2', u'Active'),
+        (u'3', u'Inactive'),
     )
 
     user = models.ForeignKey(User, unique=True)

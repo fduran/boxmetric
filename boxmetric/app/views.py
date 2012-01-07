@@ -12,10 +12,25 @@ from django.forms import model_to_dict
 from celery.decorators import task
 from boxmetric.app.query_services import EmailQueryServices
 from boxmetric.app.tasks import load_contacts
+from boxmetric.app.forms import SignupForm
 
 
 def index(request):
     return render_to_response('index.html', context_instance=RequestContext(request))
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            # use gmail user name as our django user name (both are max 30 chars)
+            # 1. create password, profile. 
+            # (2. Email link with one-time auth token)
+            # 3. hand off to gmail authorize
+            return render_to_response('index.html', context_instance=RequestContext(request))
+    else:
+        form = SignupForm(initial={'gmail':'example@gmail.com'})
+    return render_to_response('registration/signup.html', {'form': form, }, context_instance=RequestContext(request))
 
 
 @login_required
@@ -32,17 +47,14 @@ def dashboard(request):
                 raise Http404
         else:
             raise Http404
-
     else:       
         L = []
         for e in Contact.objects.filter(user=request.user).values('id', 'email'):
             e['value'] = e.pop('email')        
             L.append(e)
-
         for e in Contact.objects.filter(user=request.user).exclude(name='').values('id', 'name'):
             e['value'] = e.pop('name')
             L.append(e)
-
         csdata = simplejson.dumps(L)
         return render_to_response('dashboard.html', {'user': request.user, 'csdata': csdata,}, context_instance=RequestContext(request))
 
@@ -54,7 +66,6 @@ def login(request):
         # testing celery, delete this:
         load_contacts.delay('some@example.com')
         user_event(request, u'LI')
-
     return login
 
 
