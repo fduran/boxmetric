@@ -24,8 +24,23 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True)),
             ('date_created', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
+            ('is_gmail', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('status', self.gf('django.db.models.fields.CharField')(default=u'0', max_length=1)),
         ))
         db.send_create_signal('app', ['UserProfile'])
+
+        # Adding model 'UserEvent'
+        db.create_table('app_userevent', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('type', self.gf('django.db.models.fields.CharField')(default=u'IF', max_length=2)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True)),
+            ('extra', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
+            ('ip', self.gf('django.db.models.fields.CharField')(max_length=15, null=True, blank=True)),
+            ('referer', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
+            ('agent', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+        ))
+        db.send_create_signal('app', ['UserEvent'])
 
 
     def backwards(self, orm):
@@ -35,6 +50,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'UserProfile'
         db.delete_table('app_userprofile')
+
+        # Deleting model 'UserEvent'
+        db.delete_table('app_userevent')
 
 
     models = {
@@ -47,10 +65,23 @@ class Migration(SchemaMigration):
             'thumbnail': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
+        'app.userevent': {
+            'Meta': {'object_name': 'UserEvent'},
+            'agent': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'extra': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.CharField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'referer': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
+            'type': ('django.db.models.fields.CharField', [], {'default': "u'IF'", 'max_length': '2'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
         'app.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
             'date_created': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_gmail': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'status': ('django.db.models.fields.CharField', [], {'default': "u'0'", 'max_length': '1'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'unique': 'True'})
         },
         'auth.group': {

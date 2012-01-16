@@ -86,7 +86,66 @@ def logout_page(request):
     user_event(request, u'LO')
     logout(request)
     return HttpResponseRedirect(reverse('boxmetric.app.views.index'))
+    
+def timeline_by_year_month(request, year, month):
+    print str(year) + " - " + str(month)
+    return render_to_response('timeline.html', {'year': year, 'month': month,}, context_instance=RequestContext(request))
 
+def timeline_by_year(request, year):
+    print "in here 1"
+    return render_to_response('timeline.html', context_instance=RequestContext(request))
+
+def timeline_all(request):
+    print "in here 2"
+    return render_to_response('timeline.html', context_instance=RequestContext(request))
+
+def emails_summary(request):
+    return render_to_response('emails.html', context_instance=RequestContext(request))
+    
+def emails_by_folder(request, folder):
+    return render_to_response('emails.html', context_instance=RequestContext(request))
+
+def emails_by_folder_year_month(request, folder, year, month):
+    return render_to_response('emails.html', context_instance=RequestContext(request))
+
+def emails_by_folder_year(request, folder, year):
+    return render_to_response('emails.html', context_instance=RequestContext(request))
+
+def emails_by_folder_year_month_week(request, folder, year, month, week):
+    return render_to_response('emails.html', context_instance=RequestContext(request))
+
+def emails_by_folder_year_month_day(request, folder, year, month, day):
+    return render_to_response('emails.html', context_instance=RequestContext(request))
+    
+def smart_emails(request, email_pattern_name):
+    return render_to_response('smart_emails.html', context_instance=RequestContext(request))
+    
+def emaildata_summary(request):
+    return render_to_response('email_data_summary.html', context_instance=RequestContext(request))
+
+def emaildata_by_type(request, type):
+    return render_to_response('email_data.html', {'type': type}, context_instance=RequestContext(request))
+
+def emaildata_by_type_year(request, type, year):
+    return render_to_response('email_data.html', context_instance=RequestContext(request))
+
+def emaildata_by_type_year_month(request, type, year, month):
+    return render_to_response('email_data.html', context_instance=RequestContext(request))
+
+def emaildata_by_type_year_month_week(request, type, year, month, week):
+    return render_to_response('email_data.html', context_instance=RequestContext(request))
+
+def emaildata_by_type_year_month_day(request, type, year, month, day):
+    return render_to_response('email_data.html', context_instance=RequestContext(request))
+
+def account_settings_by_section(request, section_name):
+    return render_to_response('account_settings.html', context_instance=RequestContext(request))
+
+def account_settings(request):
+    return render_to_response('account_settings.html', context_instance=RequestContext(request))
+
+def page(request, page_name):
+    return render_to_response('content_page.html', {'page_name': page_name,}, context_instance=RequestContext(request))
 
 def user_event(request, type):
     ip = request.META.get('REMOTE_ADDR', '')
