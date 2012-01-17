@@ -3,3 +3,6 @@ venv
 local_settings.py
 sqlite3/
 celerybeat-schedule
+Include/
+Lib/
+Scripts/
