@@ -4,6 +4,7 @@
     <title>BoxMetric.com - Email Analytics</title>
     <link href="http://c196149.r49.cf1.rackcdn.com/bootstrap.css" rel="stylesheet">
     {% block extra_js %}{% endblock extra_js %}
+    
 
     <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -24,26 +25,40 @@
       <div class="fill">
         <div class="container">
           <a class="brand" href="/">BoxMetric&#8482;</a>
-          <ul class="nav">
+          
+          <ul class="topnav">
             <li><a href="/cp/">Dashboard</a></li>
             <li><a href="/timeline/">Timeline</a></li>
-            <li><a href="/emails/">Emails</a></li>
-            <li><a href="/smart-emails/sensitive">Sensitive Emails</a></li>
-            <li><a href="/emaildata/">Email Data Summary</a></li>
-            <li><a href="/emaildata/contacts">Contacts</a></li>
-            <li><a href="/emaildata/pictures">Pictures</a></li>
-            <li><a href="/emaildata/videos">Videos</a></li>
-            <li><a href="/emaildata/documents">Documents</a></li>
-            <li><a href="/emaildata/attachments">Attachments</a></li>
+            <li>
+                <a href="/emails/">Email Views</a>
+                <ul class="subnav">
+                    <li><a href="/smart-emails/sensitive">Emails sent with no reply</a></li>
+                    <li><a href="/smart-emails/sensitive">Emails received with no reply</a></li>
+                    <li><a href="/smart-emails/sensitive">Sensitive Emails</a></li>
+                    <li><a href="/smart-emails/sensitive">+Add Email View</a></li>
+                </ul>
+            </li>
+            
+            <li>
+                <a href="/emaildata/">Email Assets</a>
+                <ul class="subnav">
+                    <li><a href="/emaildata/contacts">Contacts</a></li>
+                    <li><a href="/emaildata/pictures">Pictures</a></li>
+                    <li><a href="/emaildata/videos">Videos</a></li>
+                    <li><a href="/emaildata/documents">Documents</a></li>
+                    <li><a href="/emaildata/attachments">Attachments</a></li>
+                </ul>
+            </li>
             <li><a href="/page/email-labs">Charts and APIs</a></li>
             <li><a href="/account-settings/all">Account Settings</a></li>
           </ul>
+          
         </div>
       </div>
     </div>
-
+<div style="white-space:pre;">
 {% block content %}{% endblock %}
-
+</div>
     <footer>
         <div align="center" style="padding:0 0 10px 0">
             <br/><br/>
